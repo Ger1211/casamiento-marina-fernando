@@ -112,7 +112,7 @@ button {
   position: absolute;
   width: 180px;
   height: 230px;
-  background-image: url('../assets/floral-corner.png?v=8');
+  background-image: url('../assets/floral-corner.png?v=9');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -132,9 +132,33 @@ button {
   transform: scaleX(-1);
 }
 
+.eucalyptus {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  background-image: url('../assets/eucalyptus.png?v=9');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.eucalyptus.bottom-left {
+  bottom: -40px;
+  left: -80px;
+  transform: rotate(-25deg);
+}
+
+.eucalyptus.bottom-right {
+  bottom: -40px;
+  right: -80px;
+  transform: scaleX(-1) rotate(-25deg);
+}
+
 /* Subtle SVG leaves for ambient motion */
 .leaves-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
@@ -898,6 +922,21 @@ footer {
     top: -30px;
     right: -170px;
     transform: scaleX(-1);
+  }
+
+  .eucalyptus {
+    width: 170px;
+    height: 170px;
+  }
+
+  .eucalyptus.bottom-left {
+    bottom: -30px;
+    left: -55px;
+  }
+
+  .eucalyptus.bottom-right {
+    bottom: -30px;
+    right: -55px;
   }
 
   .map-wrap iframe {
