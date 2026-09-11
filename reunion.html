@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es" data-date="2026-12-05T13:30:00-03:00">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Marina & Fernando — Reunión Íntima</title>
+  <meta name="description" content="Invitación a la reunión íntima de Marina y Fernando. 5 de diciembre de 2026.">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Dancing+Script:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=7">
+
+
+</head>
+<body>
+
+  <!-- Welcome overlay -->
+  <div class="welcome-overlay" id="welcome">
+    <div id="welcome-default">
+      <div class="welcome-names">Marina & Fernando</div>
+      <div class="welcome-date">5 de diciembre de 2026</div>
+    </div>
+    <div id="welcome-guest" style="display:none;">
+      <div class="welcome-guest-label">Invitación para</div>
+      <div class="welcome-guest-name" id="welcome-guest-name"></div>
+    </div>
+    <button class="welcome-btn" id="welcome-btn">Abrir invitación</button>
+  </div>
+
+  <!-- Floral decorations -->
+  <div class="floral-bg">
+    <div class="floral-corner top-left"></div>
+    <div class="floral-corner top-right"></div>
+    <div class="eucalyptus bottom-left"></div>
+    <div class="eucalyptus bottom-right"></div>
+  </div>
+
+  <!-- Ambient leaves -->
+  <div class="leaves-bg">
+    <div class="leaf leaf-1"></div>
+    <div class="leaf leaf-2"></div>
+    <div class="leaf leaf-3"></div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Reunión íntima</div>
+      <h1 class="hero-names">Marina <span class="amp">&</span> Fernando</h1>
+      <div class="hero-date">
+        Sábado <span class="day">5</span> de diciembre de <span class="day">2026</span>
+      </div>
+      <p class="hero-intro">
+        Queremos compartir una reunión íntima y tranquila con quienes más queremos. Sin música, sin formalidades: solo buena compañía y mucho cariño.
+      </p>
+      <div class="countdown-label" id="countdown-label">Faltan:</div>
+      <div class="countdown">
+        <div class="countdown-cell"><span class="num" id="cd-days">00</span><span class="lbl">Días</span></div>
+        <div class="countdown-cell"><span class="num" id="cd-hours">00</span><span class="lbl">Horas</span></div>
+        <div class="countdown-cell"><span class="num" id="cd-min">00</span><span class="lbl">Min</span></div>
+        <div class="countdown-cell"><span class="num" id="cd-sec">00</span><span class="lbl">Seg</span></div>
+      </div>
+    </div>
+    <a href="#encuentro" class="scroll-cue">
+      <span>Descubrí más</span>
+      <svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M7 1V19M7 19L1 13M7 19L13 13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </section>
+
+  <!-- Encuentro -->
+  <section id="encuentro">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">El encuentro</div>
+        <h2 class="section-title">Una tarde juntos</h2>
+        <p class="section-subtitle">Celebrar con vos es lo más importante. Te esperamos para disfrutar de una reunión relajada y especial.</p>
+      </div>
+      <div class="itinerary reveal">
+        <div class="itinerary-item">
+          <div class="itinerary-time">13:30</div>
+          <div class="itinerary-body">
+            <h3>Bienvenida</h3>
+            <p>Llegada a la quinta y un encuentro cálido con familia y amigos.</p>
+          </div>
+        </div>
+        <div class="itinerary-item">
+          <div class="itinerary-time">14:00</div>
+          <div class="itinerary-body">
+            <h3>Almuerzo</h3>
+            <p>Comida compartida en un ambiente relajado e íntimo.</p>
+          </div>
+        </div>
+        <div class="itinerary-item">
+          <div class="itinerary-time">17:00</div>
+          <div class="itinerary-body">
+            <h3>Charla y momentos</h3>
+            <p>Conversación, risas y recuerdos hasta que el día nos invite a despedirnos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notas -->
+  <section id="notas" class="alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">Detalles</div>
+        <h2 class="section-title">Lo que querés saber</h2>
+      </div>
+      <div class="card" style="margin-bottom:24px;">
+        <h3>Sin música</h3>
+        <p>Buscamos un ambiente tranquilo donde pueda fluir la conversación y el disfrute de cada momento.</p>
+      </div>
+      <div class="card">
+        <h3>Sin código de vestimenta</h3>
+        <p>Vení como te sientas cómodo/a. Lo importante es que estés con nosotros.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ubicación -->
+  <section id="lugar">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">Ubicación</div>
+        <h2 class="section-title">¿Dónde?</h2>
+      </div>
+      <div class="card">
+        <h3>Quinta Los Olivos</h3>
+        <p><strong>Calle Los Olivos S/N</strong><br>Berazategui, Provincia de Buenos Aires</p>
+        <div class="map-wrap">
+          <iframe src="https://maps.google.com/maps?q=Quinta+Los+Olivos,+Berazategui,+Buenos+Aires&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=&amp;output=embed" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <a class="btn btn-primary" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Quinta+Los+Olivos+Berazategui+Buenos+Aires">Cómo llegar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Regalos -->
+  <section id="regalo" class="alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">Regalos</div>
+        <h2 class="section-title">Tu presencia</h2>
+      </div>
+      <div class="card">
+        <p class="gift-text">"El mejor regalo es tu presencia"</p>
+        <p>No esperamos nada más que compartir este día con vos. Gracias por acompañarnos.</p>
+        <div class="gift-alias">
+          <p>Si querés hacernos un regalo, podés transferir a este alias ficticio:</p>
+          <div class="alias-box">
+            <span class="alias-value">marina.fernando.regalo</span>
+            <button class="alias-copy" type="button" aria-label="Copiar alias">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span class="copy-label">Copiar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calendario -->
+  <section id="recordatorio">
+    <div class="container" style="text-align:center;">
+      <div class="section-header reveal">
+        <div class="section-label">Agendá</div>
+        <h2 class="section-title">No te lo pierdas</h2>
+      </div>
+      <button class="btn btn-outline reveal" id="btn-calendar"
+        data-title="Reunión Íntima - Marina & Fernando"
+        data-location="Quinta Los Olivos, Berazategui"
+        data-details="Reunión íntima sin música y sin código de vestimenta."
+        data-start="20261205T133000"
+        data-end="20261205T180000">Agregar al calendario</button>
+    </div>
+  </section>
+
+  <!-- RSVP -->
+  <section id="rsvp">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">Confirmación</div>
+        <h2 class="section-title">¿Nos acompañás?</h2>
+      </div>
+
+      <div class="rsvp-deadline reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        Tenés tiempo hasta el 5 de noviembre de 2026
+      </div>
+
+      <div class="rsvp-card reveal">
+        <form id="rsvp-form"
+          data-form-id="REEMPLAZAR_FORM_ID"
+          data-entry-name="entry.REEMPLAZAR"
+          data-entry-attend="entry.REEMPLAZAR"
+          data-entry-guests="entry.REEMPLAZAR"
+          data-entry-restrictions="entry.REEMPLAZAR"
+          data-entry-message="entry.REEMPLAZAR">
+          <div class="field">
+            <label for="r-name">Nombre y apellido</label>
+            <input type="text" id="r-name" required placeholder="Escribí tu nombre">
+          </div>
+          <div class="field">
+            <label>¿Vas a poder acompañarnos?</label>
+            <div class="radio-row">
+              <label class="radio-opt" id="opt-yes">
+                <input type="radio" name="attend" value="si" required> Sí, ahí voy
+              </label>
+              <label class="radio-opt" id="opt-no">
+                <input type="radio" name="attend" value="no"> No voy a poder
+              </label>
+            </div>
+          </div>
+          <div class="field" id="guests-field">
+            <label for="r-guests">Cantidad de personas (incluyéndote)</label>
+            <input type="number" id="r-guests" min="1" max="10" value="1">
+          </div>
+          <div class="field" id="restrictions-field">
+            <label for="r-restrictions">Restricciones alimentarias (opcional)</label>
+            <textarea id="r-restrictions" placeholder="Vegano, celiaco, vegetariano, etc."></textarea>
+          </div>
+          <div class="field">
+            <label for="r-msg">Mensaje para los novios (opcional)</label>
+            <textarea id="r-msg" placeholder="Escribí algo lindo..."></textarea>
+          </div>
+          <button type="submit" class="submit-btn" id="submit-btn">Confirmar asistencia</button>
+          <div class="form-error" id="form-error">Hubo un problema al enviar. Probá de nuevo en un momento.</div>
+        </form>
+        <div class="rsvp-thanks" id="rsvp-thanks">
+          <h3>¡Gracias!</h3>
+          <p id="thanks-text"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-names">Marina & Fernando</div>
+    <p class="footer-text">¡Los esperamos!</p>
+  </footer>
+
+  <!-- GSAP -->
+  <script src="js/gsap.min.js"></script>
+  <script src="js/ScrollTrigger.min.js"></script>
+  <script src="js/main.js?v=4"></script>
+</body>
+</html>
