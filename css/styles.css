@@ -112,7 +112,7 @@ button {
   position: absolute;
   width: 180px;
   height: 230px;
-  background-image: url('../assets/floral-corner.png?v=9');
+  background-image: url('../assets/floral-corner.png?v=10');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -136,7 +136,7 @@ button {
   position: absolute;
   width: 220px;
   height: 220px;
-  background-image: url('../assets/eucalyptus.png?v=9');
+  background-image: url('../assets/eucalyptus.png?v=10');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -625,12 +625,15 @@ section.alt {
 
 .alias-box {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   background: var(--bg-soft);
   border: 1px solid var(--sky-soft);
   border-radius: 12px;
   padding: 10px 14px;
+  max-width: 100%;
 }
 
 .alias-value {
@@ -757,8 +760,13 @@ section.alt {
   border: 1.5px solid var(--sky-soft);
   border-radius: 10px;
   font-size: 0.9rem;
+  line-height: 1.25;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
 }
 
 .radio-opt:hover {
@@ -863,6 +871,32 @@ footer {
 @media (max-width: 480px) {
   .container {
     padding: 0 20px;
+  }
+
+  .alias-box {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .alias-value {
+    font-size: 1.05rem;
+    word-break: break-word;
+  }
+
+  .alias-copy {
+    justify-content: center;
+    width: 100%;
+    padding: 10px 12px;
+  }
+
+  .radio-opt {
+    font-size: 0.82rem;
+    padding: 12px 8px;
+    min-height: 48px;
   }
 
   .hero {
