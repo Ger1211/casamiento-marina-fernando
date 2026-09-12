@@ -34,10 +34,27 @@
   }
 
   // =========================================================
-  // 2. Welcome overlay
+  // 2. Welcome overlay + music
   // =========================================================
   const welcome = document.getElementById('welcome');
   const welcomeBtn = document.getElementById('welcome-btn');
+  const audio = document.getElementById('bg-music');
+  const musicBtn = document.getElementById('music-btn');
+
+  if (audio) {
+    audio.volume = 0.6;
+  }
+
+  function playMusic() {
+    if (!audio) return;
+    const source = audio.querySelector('source');
+    if (!source || !source.src) return;
+    audio.play().then(() => {
+      if (musicBtn) musicBtn.classList.remove('paused');
+    }).catch(() => {
+      console.log('Audio playback requires user interaction');
+    });
+  }
 
   function hideWelcome() {
     if (!welcome) return;
@@ -50,6 +67,8 @@
     if (hero) {
       hero.scrollIntoView({ behavior: 'smooth' });
     }
+
+    playMusic();
   }
 
   if (welcome) {
@@ -60,6 +79,40 @@
   if (welcomeBtn) {
     welcomeBtn.addEventListener('click', hideWelcome);
   }
+
+  // Music toggle
+  let userPaused = false;
+  if (musicBtn && audio) {
+    musicBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        userPaused = false;
+        audio.play().then(() => {
+          musicBtn.classList.remove('paused');
+        }).catch(() => {});
+      } else {
+        userPaused = true;
+        audio.pause();
+        musicBtn.classList.add('paused');
+      }
+    });
+  }
+
+  // Pause music when app goes to background (mobile)
+  document.addEventListener('visibilitychange', () => {
+    if (!audio) return;
+    if (document.hidden) {
+      if (!audio.paused) {
+        audio.pause();
+        if (musicBtn) musicBtn.classList.add('paused');
+      }
+    } else {
+      if (!userPaused && audio.paused) {
+        audio.play().then(() => {
+          if (musicBtn) musicBtn.classList.remove('paused');
+        }).catch(() => {});
+      }
+    }
+  });
 
   // =========================================================
   // 3. Countdown
