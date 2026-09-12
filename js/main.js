@@ -1,6 +1,6 @@
 ﻿/**
  * Marina & Fernando - Wedding Invitations
- * Shared JS for both index.html (Civil + Iglesia) and reunion.html (Reunión Íntima)
+ * Shared JS for both index.html (Civil y Conferencia) and reunion.html (Reunión Íntima)
  */
 
 (function () {
@@ -162,7 +162,8 @@
 
       const attend = attendEl.value;
       const guests = attend === 'si' ? (document.getElementById('r-guests').value || 1) : 0;
-      const restrictions = document.getElementById('r-restrictions').value.trim();
+      const restrictionsEl = document.getElementById('r-restrictions');
+      const restrictions = restrictionsEl ? restrictionsEl.value.trim() : '';
       const message = document.getElementById('r-msg').value.trim();
 
       if (submitBtn) {

@@ -2,7 +2,7 @@
 
 Invitación digital de casamiento para **Marina & Fernando**.
 
-- [Civil + Iglesia](https://ger1211.github.io/casamiento-marina-fernando/)
+- [Civil y Conferencia](https://ger1211.github.io/casamiento-marina-fernando/)
 - [Reunión íntima](https://ger1211.github.io/casamiento-marina-fernando/reunion.html)
 
 Diseño en paleta **oliva + celeste pastel**, con hojas y flores en acuarela, y animaciones con **GSAP**.

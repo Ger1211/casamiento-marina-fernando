@@ -112,7 +112,7 @@ button {
   position: absolute;
   width: 180px;
   height: 230px;
-  background-image: url('../assets/floral-corner.png?v=10');
+  background-image: url('../assets/floral-corner.png?v=11');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -136,7 +136,7 @@ button {
   position: absolute;
   width: 220px;
   height: 220px;
-  background-image: url('../assets/eucalyptus.png?v=10');
+  background-image: url('../assets/eucalyptus.png?v=11');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -303,8 +303,8 @@ button {
 }
 
 .hero-eyebrow {
-  font-size: 0.7rem;
-  letter-spacing: 0.26em;
+  font-size: 0.85rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--olive);
   margin-bottom: 16px;
