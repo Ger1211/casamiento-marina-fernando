@@ -303,8 +303,8 @@ button {
 }
 
 .hero-eyebrow {
-  font-size: 0.85rem;
-  letter-spacing: 0.24em;
+  font-size: 0.95rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--olive);
   margin-bottom: 16px;
