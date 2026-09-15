@@ -301,11 +301,18 @@
         form.style.display = 'none';
         const thanks = document.getElementById('rsvp-thanks');
         const thanksText = document.getElementById('thanks-text');
+        const thanksTitle = document.getElementById('thanks-title');
         if (thanks) thanks.style.display = 'block';
         if (thanksText) {
-          thanksText.textContent = attend === 'si'
-            ? '¡Ya te anotamos! Nos vemos el 4 y 5 de diciembre.'
-            : 'Gracias por avisarnos.';
+          if (attend === 'si') {
+            if (thanksTitle) thanksTitle.style.display = 'block';
+            thanksText.classList.remove('rsvp-thanks-big');
+            thanksText.textContent = '¡Ya te anotamos! Nos vemos el 4 y 5 de diciembre.';
+          } else {
+            if (thanksTitle) thanksTitle.style.display = 'none';
+            thanksText.classList.add('rsvp-thanks-big');
+            thanksText.textContent = '¡Gracias por avisarnos!';
+          }
         }
       } else {
         if (formError) formError.style.display = 'block';

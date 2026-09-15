@@ -901,6 +901,13 @@ section.alt {
   font-size: 1.05rem;
 }
 
+.rsvp-thanks p.rsvp-thanks-big {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  color: var(--olive-dark);
+  line-height: 1.3;
+}
+
 .form-error {
   color: #C44D56;
   font-size: 0.85rem;
