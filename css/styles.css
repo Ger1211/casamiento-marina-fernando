@@ -112,7 +112,7 @@ button {
   position: absolute;
   width: 180px;
   height: 230px;
-  background-image: url('../assets/floral-corner.png?v=14');
+  background-image: url('../assets/floral-corner.png?v=15');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -136,7 +136,7 @@ button {
   position: absolute;
   width: 220px;
   height: 220px;
-  background-image: url('../assets/eucalyptus.png?v=14');
+  background-image: url('../assets/eucalyptus.png?v=15');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -322,6 +322,10 @@ button {
   padding: 0 8px;
 }
 
+.hero-names.big {
+  font-size: clamp(2.2rem, 8.5vw, 7.5rem);
+}
+
 .hero-names .amp {
   font-size: 0.5em;
   color: var(--sky);
@@ -335,6 +339,31 @@ button {
   font-size: clamp(1.2rem, 3.8vw, 1.6rem);
   color: var(--ink);
   margin-bottom: 26px;
+}
+
+.hero-date-line {
+  margin-bottom: 18px;
+}
+
+.hero-date-line:last-child {
+  margin-bottom: 0;
+}
+
+.hero-date-desc {
+  display: block;
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  font-style: italic;
+  color: var(--ink-soft);
+  max-width: 520px;
+  margin: 0 auto 6px;
+  line-height: 1.45;
+}
+
+.hero-date-full {
+  display: block;
+  font-size: clamp(1.2rem, 3.8vw, 1.6rem);
+  font-weight: 600;
+  color: var(--olive-dark);
 }
 
 @keyframes fadeInUp {
@@ -486,6 +515,15 @@ section.alt {
 
 .itinerary-body {
   padding-top: 4px;
+}
+
+.itinerary-date {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--olive);
+  margin-bottom: 4px;
+  font-weight: 500;
 }
 
 .itinerary-body h3 {
@@ -672,6 +710,43 @@ section.alt {
 
 .alias-copy.copied {
   background: var(--olive-dark);
+}
+
+/* Gift card floral frame */
+.gift-card-wrap {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.gift-card-wrap .floral-corner {
+  width: 130px;
+  height: 165px;
+  z-index: 1;
+}
+
+.gift-card-wrap .floral-corner.gift-tl {
+  top: -56px;
+  left: -41px;
+  transform: rotate(-173deg) !important;
+}
+
+.gift-card-wrap .floral-corner.gift-tr {
+  top: -56px;
+  right: -36px;
+  transform: scaleX(-1) rotate(-173deg) !important;
+}
+
+.gift-card-wrap .floral-corner.gift-bl {
+  bottom: -50px;
+  left: -40px;
+  transform: scaleX(-1) rotate(-352deg) !important;
+}
+
+.gift-card-wrap .floral-corner.gift-br {
+  bottom: -50px;
+  right: -39px;
+  transform: scaleX(-1) scaleY(-1) rotate(189deg) !important
 }
 
 /* RSVP */

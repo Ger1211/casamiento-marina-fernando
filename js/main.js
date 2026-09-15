@@ -115,16 +115,29 @@
   });
 
   // =========================================================
-  // 3. Countdown
+  // 3. Countdown (supports multiple target dates)
   // =========================================================
-  const countdownTarget = document.documentElement.dataset.date;
-  const weddingDate = countdownTarget ? new Date(countdownTarget).getTime() : null;
+  function getCountdownTargets() {
+    const root = document.documentElement;
+    const targets = [];
+    if (root.dataset.date) targets.push(new Date(root.dataset.date).getTime());
+    if (root.dataset.date2) targets.push(new Date(root.dataset.date2).getTime());
+    return targets.filter((t) => !isNaN(t)).sort((a, b) => a - b);
+  }
+
+  let countdownTargets = getCountdownTargets();
+
+  function getActiveTarget() {
+    const now = Date.now();
+    return countdownTargets.find((t) => t > now) || countdownTargets[countdownTargets.length - 1] || null;
+  }
 
   function updateCountdown() {
-    if (!weddingDate) return;
+    const target = getActiveTarget();
+    if (!target) return;
 
     const now = Date.now();
-    const diff = Math.max(0, weddingDate - now);
+    const diff = Math.max(0, target - now);
 
     const days = Math.floor(diff / 86400000);
     const hours = Math.floor((diff % 86400000) / 3600000);
@@ -147,7 +160,7 @@
     }
   }
 
-  if (weddingDate) {
+  if (countdownTargets.length) {
     updateCountdown();
     setInterval(updateCountdown, 1000);
   }
@@ -363,7 +376,7 @@
     });
 
     // Floral corners gentle sway (preserve the horizontal flip on the right corner)
-    document.querySelectorAll('.floral-corner').forEach((corner, i) => {
+    document.querySelectorAll('.floral-bg .floral-corner').forEach((corner, i) => {
       const isRight = i % 2 !== 0;
       gsap.to(corner, {
         rotation: isRight ? '-=3' : '+=3',
