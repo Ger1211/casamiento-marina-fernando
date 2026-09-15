@@ -304,8 +304,8 @@
         if (thanks) thanks.style.display = 'block';
         if (thanksText) {
           thanksText.textContent = attend === 'si'
-            ? '¡Ya te anotamos! Nos vemos el 5 de diciembre.'
-            : 'Gracias por avisarnos, vamos a extrañarte ese día.';
+            ? '¡Ya te anotamos! Nos vemos el 4 y 5 de diciembre.'
+            : 'Gracias por avisarnos.';
         }
       } else {
         if (formError) formError.style.display = 'block';
