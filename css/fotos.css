@@ -50,13 +50,6 @@
   transform: translateY(-6px);
 }
 
-.fotos-hero-date {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1rem, 3vw, 1.2rem);
-  color: var(--ink-soft);
-  margin-bottom: 26px;
-}
-
 .fotos-hero-title {
   font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
