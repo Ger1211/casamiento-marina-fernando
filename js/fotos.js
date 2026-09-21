@@ -219,19 +219,17 @@
     }
   }
 
-  prevBtn.addEventListener('click', () => {
-    if (currentPage > 0) {
-      currentPage--;
-      loadGallery();
-      window.scrollTo({ top: galleryGrid.offsetTop - 100, behavior: 'smooth' });
-    }
-  });
-
-  nextBtn.addEventListener('click', () => {
-    currentPage++;
+prevBtn.addEventListener('click', () => {
+  if (currentPage > 0) {
+    currentPage--;
     loadGallery();
-    window.scrollTo({ top: galleryGrid.offsetTop - 100, behavior: 'smooth' });
-  });
+  }
+});
+
+nextBtn.addEventListener('click', () => {
+  currentPage++;
+  loadGallery();
+});
 
   lightboxClose.addEventListener('click', () => lightbox.classList.remove('active'));
   lightbox.addEventListener('click', (e) => {
