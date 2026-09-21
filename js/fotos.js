@@ -24,6 +24,7 @@
   const statusMsg = document.getElementById('status-msg');
   const galleryGrid = document.getElementById('gallery-grid');
   const galleryEmpty = document.getElementById('gallery-empty');
+  const gallerySub = document.getElementById('gallery-sub');
   const pagination = document.getElementById('pagination');
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
@@ -182,11 +183,13 @@
 
       if (!data.photos || data.photos.length === 0) {
         galleryEmpty.style.display = 'block';
+        if (gallerySub) gallerySub.style.display = 'none';
         pagination.style.display = 'none';
         return;
       }
 
       galleryEmpty.style.display = 'none';
+      if (gallerySub) gallerySub.style.display = 'block';
       pagination.style.display = 'flex';
 
       const totalPages = Math.max(1, Math.ceil(data.total / PAGE_SIZE));
@@ -215,6 +218,7 @@
       galleryGrid.innerHTML = '';
       galleryEmpty.textContent = 'No se pudo cargar la galería. Verificá tu conexión.';
       galleryEmpty.style.display = 'block';
+      if (gallerySub) gallerySub.style.display = 'none';
       pagination.style.display = 'none';
     }
   }
