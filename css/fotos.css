@@ -6,13 +6,13 @@
 /* Hero header */
 .fotos-hero {
   position: relative;
-  min-height: 46vh;
-  min-height: 46dvh;
+  min-height: 34vh;
+  min-height: 34dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 120px 24px 80px;
+  padding: 120px 24px 20px;
   overflow: hidden;
 }
 
@@ -68,6 +68,11 @@
 /* Sections */
 .fotos-section {
   padding: 48px 0;
+}
+
+/* Tighter spacing between the hero subtitle and the upload card */
+#subir {
+  padding-top: 12px;
 }
 
 /* Upload card */
