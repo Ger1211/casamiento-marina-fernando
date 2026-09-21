@@ -23,6 +23,11 @@
   z-index: 0;
 }
 
+/* Top-right floral corner: base position (right: -197px) leaves it off-screen */
+.fotos-hero .floral-corner.top-right {
+  right: -50px;
+}
+
 .fotos-hero-content {
   position: relative;
   z-index: 2;
@@ -376,21 +381,4 @@
   padding: 60px 24px;
   text-align: center;
   background: var(--bg-soft);
-}
-
-.back-link {
-  display: inline-block;
-  margin-bottom: 24px;
-  color: var(--olive);
-  font-size: 0.85rem;
-  text-decoration: none;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border-bottom: 1px solid var(--sky-soft);
-  padding-bottom: 2px;
-}
-
-.back-link:hover {
-  color: var(--olive-dark);
-  border-color: var(--olive);
 }
