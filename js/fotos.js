@@ -155,7 +155,39 @@
         renderFileList();
         guestNameInput.value = '';
         currentPage = 0;
-        loadGallery();
+// =========================================================
+  // Ambient animations (leaves + floral corners)
+  // =========================================================
+  function initAmbientAnimations() {
+    if (typeof gsap === 'undefined') return;
+
+    document.querySelectorAll('.leaf').forEach((leaf, i) => {
+      gsap.to(leaf, {
+        y: '+=25',
+        x: '+=10',
+        rotation: i % 2 === 0 ? '+=8' : '-=8',
+        duration: 4 + i * 0.5,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true
+      });
+    });
+
+    document.querySelectorAll('.floral-bg .floral-corner').forEach((corner, i) => {
+      const isRight = i % 2 !== 0;
+      gsap.to(corner, {
+        rotation: isRight ? '-=3' : '+=3',
+        duration: 5 + i,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        transformOrigin: isRight ? 'top left' : 'top right'
+      });
+    });
+  }
+
+  initAmbientAnimations();
+  loadGallery();
       } else {
         statusMsg.textContent = data.message || 'Ocurrió un error al subir la foto.';
         statusMsg.className = 'status-msg error';
