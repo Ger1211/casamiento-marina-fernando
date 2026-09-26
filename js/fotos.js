@@ -32,10 +32,22 @@
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
   const lightboxClose = document.getElementById('lightbox-close');
+  const lightboxPrev = document.getElementById('lightbox-prev');
+  const lightboxNext = document.getElementById('lightbox-next');
+  const lightboxCount = document.getElementById('lightbox-count');
 
   let selectedFiles = [];
   let currentPage = 0;
   const PAGE_SIZE = 6;
+
+  let currentPhotos = [];
+  let lightboxIndex = 0;
+  let totalCount = 0;
+  let hasMore = false;
+  let lightboxLoading = false;
+  let lightboxStatus = '';
+  let touchStartX = null;
+  let touchMoved = false;
 
   function resolveUrl(path) {
     if (!path) return '';
@@ -170,50 +182,63 @@
     }
   }
 
+  async function fetchPage(page) {
+    const resp = await fetch(
+      `${API_BASE_URL}/api/photos?event=${encodeURIComponent(EVENT)}&page=${page}&size=${PAGE_SIZE}`
+    );
+    return resp.json();
+  }
+
+  function applyGalleryData(data) {
+    currentPhotos = data.photos || [];
+    totalCount = data.total || 0;
+    hasMore = !!data.hasMore;
+
+    galleryGrid.innerHTML = '';
+
+    if (currentPhotos.length === 0) {
+      galleryEmpty.style.display = 'block';
+      if (gallerySub) gallerySub.style.display = 'none';
+      pagination.style.display = 'none';
+      return;
+    }
+
+    galleryEmpty.style.display = 'none';
+    if (gallerySub) gallerySub.style.display = 'block';
+    pagination.style.display = 'flex';
+
+    const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+    pageInfo.textContent = `Página ${currentPage + 1} de ${totalPages}`;
+    prevBtn.disabled = currentPage === 0;
+    nextBtn.disabled = !hasMore;
+
+    currentPhotos.forEach((photo, idx) => {
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      if (photo.thumbnail) {
+        const img = document.createElement('img');
+        img.src = resolveUrl(photo.thumbnail);
+        img.alt = photo.originalName || 'Foto';
+        img.loading = 'lazy';
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', () => {
+          lightboxStatus = '';
+          lightboxIndex = idx;
+          updateLightbox();
+          lightbox.classList.add('active');
+        });
+        item.appendChild(img);
+      }
+      galleryGrid.appendChild(item);
+    });
+  }
+
   async function loadGallery() {
     showLoadingPlaceholders();
 
     try {
-      const resp = await fetch(
-        `${API_BASE_URL}/api/photos?event=${encodeURIComponent(EVENT)}&page=${currentPage}&size=${PAGE_SIZE}`
-      );
-      const data = await resp.json();
-
-      galleryGrid.innerHTML = '';
-
-      if (!data.photos || data.photos.length === 0) {
-        galleryEmpty.style.display = 'block';
-        if (gallerySub) gallerySub.style.display = 'none';
-        pagination.style.display = 'none';
-        return;
-      }
-
-      galleryEmpty.style.display = 'none';
-      if (gallerySub) gallerySub.style.display = 'block';
-      pagination.style.display = 'flex';
-
-      const totalPages = Math.max(1, Math.ceil(data.total / PAGE_SIZE));
-      pageInfo.textContent = `Página ${currentPage + 1} de ${totalPages}`;
-      prevBtn.disabled = currentPage === 0;
-      nextBtn.disabled = !data.hasMore;
-
-      data.photos.forEach((photo) => {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        if (photo.thumbnail) {
-          const img = document.createElement('img');
-          img.src = resolveUrl(photo.thumbnail);
-          img.alt = photo.originalName || 'Foto';
-          img.loading = 'lazy';
-          img.style.cursor = 'pointer';
-          img.addEventListener('click', () => {
-            lightboxImg.src = resolveUrl(photo.thumbnail);
-            lightbox.classList.add('active');
-          });
-          item.appendChild(img);
-        }
-        galleryGrid.appendChild(item);
-      });
+      const data = await fetchPage(currentPage);
+      applyGalleryData(data);
     } catch (err) {
       galleryGrid.innerHTML = '';
       galleryEmpty.textContent = 'No se pudo cargar la galería. Verificá tu conexión.';
@@ -223,22 +248,129 @@
     }
   }
 
-prevBtn.addEventListener('click', () => {
-  if (currentPage > 0) {
-    currentPage--;
-    loadGallery();
+  // =========================================================
+  // Lightbox navigation
+  // =========================================================
+  function resolveLightboxUrl(photo) {
+    if (!photo) return '';
+    const full = photo.url || photo.image || photo.full || photo.original;
+    if (full) return resolveUrl(full);
+    return resolveUrl(photo.thumbnail);
   }
-});
 
-nextBtn.addEventListener('click', () => {
-  currentPage++;
-  loadGallery();
-});
+  function updateLightbox() {
+    const photo = currentPhotos[lightboxIndex];
+    if (!photo) {
+      lightboxImg.src = '';
+      lightboxCount.textContent = lightboxStatus || '';
+      lightboxPrev.disabled = true;
+      lightboxNext.disabled = true;
+      return;
+    }
+
+    lightboxImg.src = resolveLightboxUrl(photo);
+    lightboxCount.textContent = lightboxStatus || (totalCount > 0
+      ? `${currentPage * PAGE_SIZE + lightboxIndex + 1} / ${totalCount}`
+      : '');
+
+    lightboxPrev.disabled = lightboxLoading || (currentPage === 0 && lightboxIndex === 0);
+    lightboxNext.disabled = lightboxLoading || (!hasMore && lightboxIndex === currentPhotos.length - 1);
+  }
+
+  async function navigateLightbox(delta) {
+    if (lightboxLoading) return;
+
+    const target = lightboxIndex + delta;
+    if (target >= 0 && target < currentPhotos.length) {
+      lightboxStatus = '';
+      lightboxIndex = target;
+      updateLightbox();
+      return;
+    }
+
+    if (delta > 0 && !hasMore) return;
+    if (delta < 0 && currentPage === 0) return;
+
+    const nextPage = currentPage + delta;
+    lightboxLoading = true;
+    lightboxPrev.disabled = true;
+    lightboxNext.disabled = true;
+    lightboxImg.style.opacity = '0.4';
+    try {
+      const data = await fetchPage(nextPage);
+      if (!data.photos || data.photos.length === 0) {
+        hasMore = false;
+        lightboxStatus = 'No hay más fotos.';
+        return;
+      }
+      currentPage = nextPage;
+      currentPhotos = data.photos;
+      totalCount = data.total || 0;
+      hasMore = !!data.hasMore;
+      lightboxIndex = delta > 0 ? 0 : currentPhotos.length - 1;
+      lightboxStatus = '';
+      applyGalleryData(data);
+    } catch (err) {
+      lightboxStatus = 'No se pudo cargar.';
+    } finally {
+      lightboxLoading = false;
+      lightboxImg.style.opacity = '1';
+      updateLightbox();
+    }
+  }
+
+  prevBtn.addEventListener('click', () => {
+    if (currentPage > 0) {
+      currentPage--;
+      loadGallery();
+    }
+  });
+
+  nextBtn.addEventListener('click', () => {
+    currentPage++;
+    loadGallery();
+  });
+
+  lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
+  lightboxNext.addEventListener('click', () => navigateLightbox(1));
 
   lightboxClose.addEventListener('click', () => lightbox.classList.remove('active'));
   lightbox.addEventListener('click', (e) => {
+    if (touchMoved) {
+      touchMoved = false;
+      return;
+    }
     if (e.target === lightbox) lightbox.classList.remove('active');
   });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') {
+      lightbox.classList.remove('active');
+    } else if (e.key === 'ArrowLeft') {
+      navigateLightbox(-1);
+    } else if (e.key === 'ArrowRight') {
+      navigateLightbox(1);
+    }
+  });
+
+  lightbox.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchMoved = false;
+  }, { passive: true });
+
+  lightbox.addEventListener('touchmove', () => {
+    touchMoved = true;
+  }, { passive: true });
+
+  lightbox.addEventListener('touchend', (e) => {
+    if (touchStartX === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX;
+    touchStartX = null;
+    if (Math.abs(deltaX) > 40) {
+      navigateLightbox(deltaX < 0 ? 1 : -1);
+    }
+  }, { passive: true });
 
   loadGallery();
 })();
