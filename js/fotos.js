@@ -8,11 +8,11 @@
 
   // =========================================================
   // CONFIG
-  // - API_BASE_URL: Tailscale funnel while testing; switch to the
-  //   cloud URL on the event day.
+  // - API_BASE_URL: cloud VM (primary). The home PC keeps an identical
+  //   replica and is the fallback: https://desktop-udmt3js.tailfe106b.ts.net
   // - EVENT: album slug. Photos for this event are stored separately.
   // =========================================================
-  const API_BASE_URL = 'https://desktop-udmt3js.tailfe106b.ts.net';
+  const API_BASE_URL = 'https://nube-fotos.tailfe106b.ts.net';
   const EVENT = 'marina-fernando';
 
   const cameraInput = document.getElementById('camera-input');
