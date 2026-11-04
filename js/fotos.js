@@ -8,11 +8,22 @@
 
   // =========================================================
   // CONFIG
-  // - API_BASE_URL: cloud VM (primary). The home PC keeps an identical
-  //   replica and is the fallback: https://desktop-udmt3js.tailfe106b.ts.net
+  // - CLOUD_URL: the Hetzner VM (primary).
+  // - PC_URL: the home PC, an identical replica (fallback).
+  //   One fast health probe decides which one serves this page load, so the
+  //   site keeps working when the VM is off.
   // - EVENT: album slug. Photos for this event are stored separately.
   // =========================================================
-  const API_BASE_URL = 'https://nube-fotos.tailfe106b.ts.net';
+  const CLOUD_URL = 'https://nube-fotos.tailfe106b.ts.net';
+  const PC_URL = 'https://desktop-udmt3js.tailfe106b.ts.net';
+
+  const backend = window.PhotoBackend.create({
+    cloudUrl: CLOUD_URL,
+    pcUrl: PC_URL,
+    timeoutMs: 2000,
+    onSelect: (base) => console.info('[fotos] backend:', base)
+  });
+
   const EVENT = 'marina-fernando';
 
   const cameraInput = document.getElementById('camera-input');
@@ -52,8 +63,11 @@
   function resolveUrl(path) {
     if (!path) return '';
     if (path.startsWith('data:') || path.startsWith('http')) return path;
-    return API_BASE_URL + path;
+    return backend.getBase() + path;
   }
+
+  // Start the health probe now: the page keeps painting while it resolves.
+  backend.select();
 
   // =========================================================
   // Upload
@@ -136,10 +150,12 @@
     if (guestName) formData.append('guestName', guestName);
 
     try {
-      const resp = await fetch(`${API_BASE_URL}/api/upload`, {
-        method: 'POST',
-        body: formData
-      });
+      const resp = await backend.withBackend((base) =>
+        fetch(`${base}/api/upload`, {
+          method: 'POST',
+          body: formData
+        })
+      );
       const data = await resp.json();
 
       if (data.success && data.uploaded > 0) {
@@ -214,11 +230,14 @@
     }
   }
 
-  async function fetchPage(page) {
-    const resp = await fetch(
-      `${API_BASE_URL}/api/photos?event=${encodeURIComponent(EVENT)}&page=${page}&size=${PAGE_SIZE}`
-    );
-    return resp.json();
+  function fetchPage(page) {
+    return backend.withBackend(async (base) => {
+      const resp = await fetch(
+        `${base}/api/photos?event=${encodeURIComponent(EVENT)}&page=${page}&size=${PAGE_SIZE}`
+      );
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      return resp.json();
+    });
   }
 
   function applyGalleryData(data) {
