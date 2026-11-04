@@ -171,39 +171,7 @@
         renderFileList();
         guestNameInput.value = '';
         currentPage = 0;
-// =========================================================
-  // Ambient animations (leaves + floral corners)
-  // =========================================================
-  function initAmbientAnimations() {
-    if (typeof gsap === 'undefined') return;
-
-    document.querySelectorAll('.leaf').forEach((leaf, i) => {
-      gsap.to(leaf, {
-        y: '+=25',
-        x: '+=10',
-        rotation: i % 2 === 0 ? '+=8' : '-=8',
-        duration: 4 + i * 0.5,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true
-      });
-    });
-
-    document.querySelectorAll('.floral-bg .floral-corner').forEach((corner, i) => {
-      const isRight = i % 2 !== 0;
-      gsap.to(corner, {
-        rotation: isRight ? '-=3' : '+=3',
-        duration: 5 + i,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        transformOrigin: isRight ? 'top left' : 'top right'
-      });
-    });
-  }
-
-  initAmbientAnimations();
-  loadGallery();
+        loadGallery();
       } else {
         statusMsg.textContent = data.message || 'Ocurrió un error al subir la foto.';
         statusMsg.className = 'status-msg error';
@@ -423,5 +391,43 @@
     }
   }, { passive: true });
 
+  // =========================================================
+  // Ambient animations (leaves + floral corners)
+  // =========================================================
+  // Must run exactly once, on load. Each gsap.to with a relative value
+  // ("-=3") stacks on the previous tween, so calling this twice makes the
+  // floral corner drift out of place. Hence the guard.
+  let ambientStarted = false;
+
+  function initAmbientAnimations() {
+    if (ambientStarted || typeof gsap === 'undefined') return;
+    ambientStarted = true;
+
+    document.querySelectorAll('.leaf').forEach((leaf, i) => {
+      gsap.to(leaf, {
+        y: '+=25',
+        x: '+=10',
+        rotation: i % 2 === 0 ? '+=8' : '-=8',
+        duration: 4 + i * 0.5,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true
+      });
+    });
+
+    document.querySelectorAll('.floral-bg .floral-corner').forEach((corner, i) => {
+      const isRight = i % 2 !== 0;
+      gsap.to(corner, {
+        rotation: isRight ? '-=3' : '+=3',
+        duration: 5 + i,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        transformOrigin: isRight ? 'top left' : 'top right'
+      });
+    });
+  }
+
+  initAmbientAnimations();
   loadGallery();
 })();
