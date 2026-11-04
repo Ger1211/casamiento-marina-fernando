@@ -392,11 +392,12 @@
   }, { passive: true });
 
   // =========================================================
-  // Ambient animations (leaves + floral corners)
+  // Ambient animations (leaves)
   // =========================================================
-  // Must run exactly once, on load. Each gsap.to with a relative value
-  // ("-=3") stacks on the previous tween, so calling this twice makes the
-  // floral corner drift out of place. Hence the guard.
+  // Runs exactly once, on load. The floral corners are deliberately NOT
+  // animated: they are positioned with a CSS transform (scaleX(-1) on the
+  // right one) and gsap rewrites the whole transform property, which drops
+  // the mirror and leaves the corner out of place.
   let ambientStarted = false;
 
   function initAmbientAnimations() {
@@ -412,18 +413,6 @@
         ease: 'sine.inOut',
         repeat: -1,
         yoyo: true
-      });
-    });
-
-    document.querySelectorAll('.floral-bg .floral-corner').forEach((corner, i) => {
-      const isRight = i % 2 !== 0;
-      gsap.to(corner, {
-        rotation: isRight ? '-=3' : '+=3',
-        duration: 5 + i,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        transformOrigin: isRight ? 'top left' : 'top right'
       });
     });
   }
