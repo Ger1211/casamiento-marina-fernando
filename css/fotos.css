@@ -264,6 +264,12 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.gallery-item img.loaded {
+  opacity: 1;
 }
 
 .gallery-item .loader {

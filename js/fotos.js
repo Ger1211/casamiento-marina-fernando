@@ -48,6 +48,7 @@
   const lightboxCount = document.getElementById('lightbox-count');
 
   let selectedFiles = [];
+  const selectedFilePreviews = new Map();
   let currentPage = 0;
   const PAGE_SIZE = 6;
 
@@ -57,6 +58,7 @@
   let hasMore = false;
   let lightboxLoading = false;
   let lightboxStatus = '';
+  let lightboxImageRequest = 0;
   let touchStartX = null;
   let touchMoved = false;
 
@@ -98,7 +100,12 @@
 
       const thumb = document.createElement('img');
       thumb.className = 'thumb';
-      thumb.src = URL.createObjectURL(file);
+      let previewUrl = selectedFilePreviews.get(file);
+      if (!previewUrl) {
+        previewUrl = URL.createObjectURL(file);
+        selectedFilePreviews.set(file, previewUrl);
+      }
+      thumb.src = previewUrl;
       tag.appendChild(thumb);
 
       const name = document.createElement('span');
@@ -126,10 +133,17 @@
   }
 
   function removeFile(index) {
-    const thumbs = fileList.querySelectorAll('.thumb');
-    if (thumbs[index]) URL.revokeObjectURL(thumbs[index].src);
-    selectedFiles.splice(index, 1);
+    const [removedFile] = selectedFiles.splice(index, 1);
+    revokeSelectedPreview(removedFile);
     renderFileList();
+  }
+
+  function revokeSelectedPreview(file) {
+    const previewUrl = selectedFilePreviews.get(file);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      selectedFilePreviews.delete(file);
+    }
   }
 
   cameraInput.addEventListener('change', handleFileSelect);
@@ -163,10 +177,7 @@
         statusMsg.className = 'status-msg success';
         cameraInput.value = '';
         galleryInput.value = '';
-        selectedFiles.forEach((_, i) => {
-          const thumb = fileList.querySelectorAll('.thumb')[i];
-          if (thumb) URL.revokeObjectURL(thumb.src);
-        });
+        selectedFiles.forEach(revokeSelectedPreview);
         selectedFiles = [];
         renderFileList();
         guestNameInput.value = '';
@@ -235,11 +246,20 @@
       const item = document.createElement('div');
       item.className = 'gallery-item';
       if (photo.thumbnail) {
+        const loader = document.createElement('div');
+        loader.className = 'loader';
+        loader.innerHTML = '<div class="loader-spin"></div>';
+        item.appendChild(loader);
+
         const img = document.createElement('img');
-        img.src = resolveUrl(photo.thumbnail);
         img.alt = photo.originalName || 'Foto';
         img.loading = 'lazy';
         img.style.cursor = 'pointer';
+        img.addEventListener('load', () => {
+          img.classList.add('loaded');
+          loader.remove();
+        }, { once: true });
+        img.addEventListener('error', () => loader.remove(), { once: true });
         img.addEventListener('click', () => {
           lightboxStatus = '';
           lightboxIndex = idx;
@@ -247,6 +267,7 @@
           lightbox.classList.add('active');
         });
         item.appendChild(img);
+        img.src = resolveUrl(photo.thumbnail);
       }
       galleryGrid.appendChild(item);
     });
@@ -270,11 +291,52 @@
   // =========================================================
   // Lightbox navigation
   // =========================================================
-  function resolveLightboxUrl(photo) {
+  function resolveFullUrl(photo) {
     if (!photo) return '';
     const full = photo.url || photo.image || photo.full || photo.original;
     if (full) return resolveUrl(full);
     return resolveUrl(photo.thumbnail);
+  }
+
+  function preloadFullImage(photo) {
+    const url = resolveFullUrl(photo);
+    if (url) {
+      const image = new Image();
+      image.src = url;
+    }
+  }
+
+  function showLightboxPhoto(photo) {
+    const requestId = ++lightboxImageRequest;
+    const thumbnailUrl = resolveUrl(photo.thumbnail);
+    const fullUrl = resolveFullUrl(photo);
+
+    lightboxImg.alt = photo.originalName || 'Foto';
+    lightboxImg.style.opacity = '1';
+    lightboxImg.src = thumbnailUrl || fullUrl || '';
+
+    if (!fullUrl || !thumbnailUrl || fullUrl === thumbnailUrl) return;
+
+    const fullImage = new Image();
+    fullImage.onload = async () => {
+      if (typeof fullImage.decode === 'function') {
+        try {
+          await fullImage.decode();
+        } catch (_) {
+          // onload confirms the source is available; let the visible image decode it.
+        }
+      }
+      if (requestId === lightboxImageRequest) {
+        lightboxImg.src = fullUrl;
+      }
+    };
+    fullImage.onerror = () => {
+      if (requestId === lightboxImageRequest) {
+        lightboxStatus = 'No se pudo cargar la foto en alta calidad.';
+        lightboxCount.textContent = lightboxStatus;
+      }
+    };
+    fullImage.src = fullUrl;
   }
 
   function updateLightbox() {
@@ -287,13 +349,17 @@
       return;
     }
 
-    lightboxImg.src = resolveLightboxUrl(photo);
+    showLightboxPhoto(photo);
     lightboxCount.textContent = lightboxStatus || (totalCount > 0
       ? `${currentPage * PAGE_SIZE + lightboxIndex + 1} / ${totalCount}`
       : '');
 
     lightboxPrev.disabled = lightboxLoading || (currentPage === 0 && lightboxIndex === 0);
     lightboxNext.disabled = lightboxLoading || (!hasMore && lightboxIndex === currentPhotos.length - 1);
+
+    if (lightboxIndex + 1 < currentPhotos.length) {
+      preloadFullImage(currentPhotos[lightboxIndex + 1]);
+    }
   }
 
   async function navigateLightbox(delta) {
@@ -353,19 +419,24 @@
   lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
   lightboxNext.addEventListener('click', () => navigateLightbox(1));
 
-  lightboxClose.addEventListener('click', () => lightbox.classList.remove('active'));
+  function closeLightbox() {
+    lightboxImageRequest++;
+    lightbox.classList.remove('active');
+  }
+
+  lightboxClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', (e) => {
     if (touchMoved) {
       touchMoved = false;
       return;
     }
-    if (e.target === lightbox) lightbox.classList.remove('active');
+    if (e.target === lightbox) closeLightbox();
   });
 
   document.addEventListener('keydown', (e) => {
     if (!lightbox.classList.contains('active')) return;
     if (e.key === 'Escape') {
-      lightbox.classList.remove('active');
+      closeLightbox();
     } else if (e.key === 'ArrowLeft') {
       navigateLightbox(-1);
     } else if (e.key === 'ArrowRight') {
